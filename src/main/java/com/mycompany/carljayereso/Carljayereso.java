@@ -2,7 +2,6 @@
 package com.mycompany.carljayereso;
 
 import com.login.LoginFrame;
-
 /**
  *
  * @author carljayereso
@@ -10,7 +9,7 @@ import com.login.LoginFrame;
 public class Carljayereso {
 
     public static void main(String[] args) {
-        LoginFrame loginObj = new LoginFrame();
-        loginObj.show();
+        LoginFrame cjobject = new LoginFrame();
+        cjobject.show();
     }
 }

@@ -1,6 +1,7 @@
 com/login/LoginFrame.class
 com/dashboard/DashboardFrame.class
 com/addItem/AddItem$1.class
+com/addItem/AddItem$5.class
 com/dashboard/DashboardFrame$1.class
 com/mycompany/carljayereso/Carljayereso.class
 com/dashboard/DashboardFrame$5.class
