@@ -1,3 +1,6 @@
 57820,Pringles,4
 91371,Chicharon,5
 95698,Liempo,54
+45929,Lechon manok,3
+34738,Pork,43
+50254,kutsinta,200
