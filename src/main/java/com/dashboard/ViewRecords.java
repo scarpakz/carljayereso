@@ -29,13 +29,34 @@ public class ViewRecords extends javax.swing.JFrame {
         DefaultTableModel tblModel = (DefaultTableModel) jTable1.getModel();
         tblModel.setRowCount(0); // Clear the table before loading
 
+        StringBuilder lowStockItems = new StringBuilder(); // To store low-stock items
+
         try (BufferedReader reader = new BufferedReader(new FileReader("items.txt"))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 String[] rowData = line.split(","); // Split CSV data
+
+                if (rowData.length >= 2) { // Ensure data format is correct
+                    int quantity = Integer.parseInt(rowData[1].trim()); // Convert quantity to integer
+
+                    // If quantity is less than 10, add to warning list
+                    if (quantity < 10) {
+                        lowStockItems.append(rowData[0]).append(" (").append(quantity).append(" left)\n");
+                    }
+                }
+
                 tblModel.addRow(rowData); // Add to table
             }
-        } catch (IOException e) {
+
+            // Show notification if any low stock items exist
+            if (lowStockItems.length() > 0) {
+                JOptionPane.showMessageDialog(this, 
+                    "⚠ Warning: Low stock detected!\n\n" + lowStockItems.toString(),
+                    "Low Stock Alert", 
+                    JOptionPane.WARNING_MESSAGE);
+            }
+
+        } catch (IOException | NumberFormatException e) {
             JOptionPane.showMessageDialog(this, "Error loading data: " + e.getMessage());
         }
     }

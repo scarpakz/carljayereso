@@ -330,14 +330,19 @@ public class AddItem extends javax.swing.JFrame {
         // TODO add your handling code here:
         
         DefaultTableModel tblModel = (DefaultTableModel)jTable1.getModel();
-        
-        String tblItemName = tblModel.getValueAt(jTable1.getSelectedRow(),0).toString();
-        String tblQuantity = tblModel.getValueAt(jTable1.getSelectedRow(),1).toString();
-        String tblBorrower = tblModel.getValueAt(jTable1.getSelectedRow(),2).toString();
-        
-        itemName.setText(tblItemName);
-        quantity.setText(tblQuantity);
-        borrower.setText(tblBorrower);
+        int selectedRow = jTable1.getSelectedRow(); // Get selected row index
+
+        if (selectedRow != -1) {
+            // Get data from the selected row
+            String tblItemName = tblModel.getValueAt(selectedRow, 0).toString();
+            String tblQuantity = tblModel.getValueAt(selectedRow, 1).toString();
+            String tblBorrower = tblModel.getValueAt(selectedRow, 2).toString();
+
+            // Set text fields with selected row data
+            itemName.setText(tblItemName);
+            quantity.setText(tblQuantity);
+            borrower.setText(tblBorrower);
+        }
     }//GEN-LAST:event_jTable1MouseClicked
 
     private void borrowerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_borrowerActionPerformed
@@ -345,28 +350,62 @@ public class AddItem extends javax.swing.JFrame {
     }//GEN-LAST:event_borrowerActionPerformed
 
     private void updateBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateBtnActionPerformed
-        // TODO add your handling code here:
-        DefaultTableModel tblModel = (DefaultTableModel)jTable1.getModel();
-        
-        if (jTable1.getSelectedRowCount() == 1) {
-            String name = itemName.getText();
-            String qty = quantity.getText();
-            String brwr = borrower.getText();
-            
-            tblModel.setValueAt(name, jTable1.getSelectedRow(), 0);
-            tblModel.setValueAt(qty, jTable1.getSelectedRow(), 1);
-            tblModel.setValueAt(brwr, jTable1.getSelectedRow(), 2);
-            
-            JOptionPane.showMessageDialog(this, "Update Successful!");
-        } else {
-            if (jTable1.getRowCount() == 0) {
-                JOptionPane.showMessageDialog(this, "Table is empty!");
-            } else {
-                JOptionPane.showMessageDialog(this, "Select a row to update..");
-            }
-        }
-    }//GEN-LAST:event_updateBtnActionPerformed
+        DefaultTableModel tblModel = (DefaultTableModel) jTable1.getModel();
+        int selectedRow = jTable1.getSelectedRow(); // Get selected row index
 
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(this, "Please select a row to update.");
+            return;
+        }
+
+        // Get updated values from input fields
+        String updatedItemName = itemName.getText();
+        String updatedQuantity = quantity.getText();
+        String updatedBorrower = borrower.getText();
+
+        // Update table values
+        tblModel.setValueAt(updatedItemName, selectedRow, 0);
+        tblModel.setValueAt(updatedQuantity, selectedRow, 1);
+        tblModel.setValueAt(updatedBorrower, selectedRow, 2);
+
+        // Update text file
+        updateFileAfterEdit(selectedRow, updatedItemName, updatedQuantity, updatedBorrower);
+
+        JOptionPane.showMessageDialog(this, "Successfully Updated!");
+    }//GEN-LAST:event_updateBtnActionPerformed
+    
+    private void updateFileAfterEdit(int rowIndex, String newItem, String newQuantity, String newBorrower) {
+        File inputFile = new File("items.txt");
+        File tempFile = new File("temp_items.txt");
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(inputFile));
+             BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile))) {
+
+            String line;
+            int currentIndex = 0; // Track row index while reading
+            while ((line = reader.readLine()) != null) {
+                if (currentIndex == rowIndex) {
+                    // Write updated data instead of the old row
+                    writer.write(newItem + "," + newQuantity + "," + newBorrower + "\n");
+                } else {
+                    writer.write(line + "\n"); // Write other lines unchanged
+                }
+                currentIndex++;
+            }
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(this, "Error updating file: " + e.getMessage());
+            return;
+        }
+
+        // Replace the original file with the updated file
+        if (!inputFile.delete()) {
+            JOptionPane.showMessageDialog(this, "Error deleting original file.");
+            return;
+        }
+        if (!tempFile.renameTo(inputFile)) {
+            JOptionPane.showMessageDialog(this, "Error renaming temp file.");
+        }
+    }
     /**
      * @param args the command line arguments
      */

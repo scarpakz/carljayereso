@@ -1,1 +1,4 @@
-Ryzen 2400G,50,CJ
+Mouse,223,Jerick
+J,78,JASON
+Keyboard,3,CJ
+Headset,5,Prince
