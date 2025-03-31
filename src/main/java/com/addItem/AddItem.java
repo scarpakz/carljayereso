@@ -40,7 +40,7 @@ public class AddItem extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
-        jButton1 = new javax.swing.JButton();
+        deleteBtn = new javax.swing.JButton();
         updateBtn = new javax.swing.JButton();
         borrower = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
@@ -100,10 +100,10 @@ public class AddItem extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(jTable1);
 
-        jButton1.setText("Delete Item");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        deleteBtn.setText("Delete Item");
+        deleteBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                deleteBtnActionPerformed(evt);
             }
         });
 
@@ -150,7 +150,7 @@ public class AddItem extends javax.swing.JFrame {
                             .addComponent(AddButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 194, Short.MAX_VALUE)
                             .addComponent(borrower, javax.swing.GroupLayout.Alignment.TRAILING))
                         .addGap(39, 39, 39)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(deleteBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(updateBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 712, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -180,7 +180,7 @@ public class AddItem extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 41, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(AddButton, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(deleteBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(updateBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(29, 29, 29)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -262,10 +262,70 @@ public class AddItem extends javax.swing.JFrame {
         
     }//GEN-LAST:event_AddButtonActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void deleteBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteBtnActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
+//        DefaultTableModel tblModel = (DefaultTableModel)jTable1.getModel();
+//        if (jTable1.getSelectedRowCount() == 1) {
+//            tblModel.removeRow(jTable1.getSelectedRow());
+//        } else {
+//            if (jTable1.getRowCount() == 0) {
+//                JOptionPane.showMessageDialog(this, "Table is empty.");
+//            } else {
+//                JOptionPane.showMessageDialog(this, "Please select a row.");
+//            }
+//        }
 
+        DefaultTableModel tblModel = (DefaultTableModel) jTable1.getModel();
+        int selectedRow = jTable1.getSelectedRow(); // Get selected row index
+
+        if (selectedRow == -1) { // No row selected
+            JOptionPane.showMessageDialog(this, "Please select a row to delete.");
+            return;
+        }
+
+        // Get the data from the selected row
+        String tblItemName = tblModel.getValueAt(selectedRow, 0).toString();
+        String tblQuantity = tblModel.getValueAt(selectedRow, 1).toString();
+        String tblBorrower = tblModel.getValueAt(selectedRow, 2).toString();
+
+        // Remove row from table
+        tblModel.removeRow(selectedRow);
+
+        // Update file after deletion
+        updateFileAfterDelete(tblItemName, tblQuantity, tblBorrower);
+    }//GEN-LAST:event_deleteBtnActionPerformed
+
+    // Function to rewrite 'items.txt' without the deleted row
+    private void updateFileAfterDelete(String itemName, String quantity, String borrower) {
+        File inputFile = new File("items.txt");
+        File tempFile = new File("temp_items.txt");
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(inputFile));
+             BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile))) {
+
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] rowData = line.split(",");
+                // Check if the current line matches the deleted row
+                if (rowData.length >= 3 && rowData[0].equals(itemName) && rowData[1].equals(quantity) && rowData[2].equals(borrower)) {
+                    continue; // Skip this line (deleting it)
+                }
+                writer.write(line + "\n"); // Write other lines to temp file
+            }
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(this, "Error updating file: " + e.getMessage());
+            return;
+        }
+
+        // Replace the original file with the updated file
+        if (!inputFile.delete()) {
+            JOptionPane.showMessageDialog(this, "Error deleting original file.");
+            return;
+        }
+        if (!tempFile.renameTo(inputFile)) {
+            JOptionPane.showMessageDialog(this, "Error renaming temp file.");
+        }
+    }
     private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
         // TODO add your handling code here:
         
@@ -346,8 +406,8 @@ public class AddItem extends javax.swing.JFrame {
     private javax.swing.JButton AddButton;
     private javax.swing.JTextField borrower;
     private javax.swing.JButton closeBtn;
+    private javax.swing.JButton deleteBtn;
     private javax.swing.JTextField itemName;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;

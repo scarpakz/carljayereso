@@ -1,2 +1,1 @@
-AMD,5,23
-RAG,5,JJ
+Ryzen 2400G,50,CJ
