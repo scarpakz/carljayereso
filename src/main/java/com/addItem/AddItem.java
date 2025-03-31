@@ -2,7 +2,6 @@
 package com.addItem;
 
 import java.io.*;
-import java.util.Random;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -42,6 +41,9 @@ public class AddItem extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         jButton1 = new javax.swing.JButton();
+        updateBtn = new javax.swing.JButton();
+        borrower = new javax.swing.JTextField();
+        jLabel5 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -88,9 +90,14 @@ public class AddItem extends javax.swing.JFrame {
 
             },
             new String [] {
-                "ID", "Item Name", "Quantity"
+                "Item Name", "Quantity", "Borrower"
             }
         ));
+        jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTable1MouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(jTable1);
 
         jButton1.setText("Delete Item");
@@ -99,6 +106,23 @@ public class AddItem extends javax.swing.JFrame {
                 jButton1ActionPerformed(evt);
             }
         });
+
+        updateBtn.setText("Update");
+        updateBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                updateBtnActionPerformed(evt);
+            }
+        });
+
+        borrower.setFont(new java.awt.Font("Helvetica Neue", 0, 18)); // NOI18N
+        borrower.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                borrowerActionPerformed(evt);
+            }
+        });
+
+        jLabel5.setFont(new java.awt.Font("Helvetica Neue", 0, 18)); // NOI18N
+        jLabel5.setText("Borrower");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -112,19 +136,23 @@ public class AddItem extends javax.swing.JFrame {
                 .addGap(15, 15, 15))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(56, 56, 56)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING))
+                            .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.TRAILING))
                         .addGap(18, 18, 18)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(successMessage)
                             .addComponent(itemName)
                             .addComponent(quantity)
-                            .addComponent(AddButton, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(AddButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 194, Short.MAX_VALUE)
+                            .addComponent(borrower, javax.swing.GroupLayout.Alignment.TRAILING))
                         .addGap(39, 39, 39)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(updateBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 712, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(56, Short.MAX_VALUE))
         );
@@ -143,15 +171,20 @@ public class AddItem extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(quantity, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel4))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(borrower, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel5))
+                .addGap(18, 18, 18)
                 .addComponent(successMessage)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 41, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(AddButton, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(34, 34, 34)
+                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(updateBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(29, 29, 29)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(64, Short.MAX_VALUE))
+                .addGap(34, 34, 34))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -200,14 +233,11 @@ public class AddItem extends javax.swing.JFrame {
     
     private void AddButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddButtonActionPerformed
         
-        if (itemName.getText().equals("") || quantity.getText().equals("")) { // validate integer for quantity
+        if (itemName.getText().equals("") || quantity.getText().equals("") || borrower.getText().equals("")) { // validate integer for quantity
             JOptionPane.showMessageDialog(this, "Don't leave any blanks!");
         } else {
-            // Generate a random ID
-            Random rand = new Random();
-            int randomId = rand.nextInt(100000);
             
-            String data[] = {randomId + "", itemName.getText(), quantity.getText() };
+            String data[] = {itemName.getText(), quantity.getText(), borrower.getText() };
             DefaultTableModel tblModel = (DefaultTableModel)jTable1.getModel();
             
             tblModel.addRow(data);
@@ -215,7 +245,7 @@ public class AddItem extends javax.swing.JFrame {
             
             // Save Data to .txt file
             try (FileWriter writer = new FileWriter("items.txt", true)) { // 'true' enables append mode
-                writer.write(randomId + "," + itemName.getText() + "," + quantity.getText() + "\n");
+                writer.write(itemName.getText() + "," + quantity.getText() + "," + borrower.getText() + "\n");
             } catch (IOException e) {
                 JOptionPane.showMessageDialog(this, "Error saving data: " + e.getMessage());
             }
@@ -226,6 +256,7 @@ public class AddItem extends javax.swing.JFrame {
             // Clear Fields
             this.itemName.setText("");
             this.quantity.setText("");
+            this.borrower.setText("");
             this.successMessage.show();
         }
         
@@ -234,6 +265,47 @@ public class AddItem extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
+        // TODO add your handling code here:
+        
+        DefaultTableModel tblModel = (DefaultTableModel)jTable1.getModel();
+        
+        String tblItemName = tblModel.getValueAt(jTable1.getSelectedRow(),0).toString();
+        String tblQuantity = tblModel.getValueAt(jTable1.getSelectedRow(),1).toString();
+        String tblBorrower = tblModel.getValueAt(jTable1.getSelectedRow(),2).toString();
+        
+        itemName.setText(tblItemName);
+        quantity.setText(tblQuantity);
+        borrower.setText(tblBorrower);
+    }//GEN-LAST:event_jTable1MouseClicked
+
+    private void borrowerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_borrowerActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_borrowerActionPerformed
+
+    private void updateBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateBtnActionPerformed
+        // TODO add your handling code here:
+        DefaultTableModel tblModel = (DefaultTableModel)jTable1.getModel();
+        
+        if (jTable1.getSelectedRowCount() == 1) {
+            String name = itemName.getText();
+            String qty = quantity.getText();
+            String brwr = borrower.getText();
+            
+            tblModel.setValueAt(name, jTable1.getSelectedRow(), 0);
+            tblModel.setValueAt(qty, jTable1.getSelectedRow(), 1);
+            tblModel.setValueAt(brwr, jTable1.getSelectedRow(), 2);
+            
+            JOptionPane.showMessageDialog(this, "Update Successful!");
+        } else {
+            if (jTable1.getRowCount() == 0) {
+                JOptionPane.showMessageDialog(this, "Table is empty!");
+            } else {
+                JOptionPane.showMessageDialog(this, "Select a row to update..");
+            }
+        }
+    }//GEN-LAST:event_updateBtnActionPerformed
 
     /**
      * @param args the command line arguments
@@ -272,16 +344,19 @@ public class AddItem extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton AddButton;
+    private javax.swing.JTextField borrower;
     private javax.swing.JButton closeBtn;
     private javax.swing.JTextField itemName;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
     private javax.swing.JTextField quantity;
     private javax.swing.JLabel successMessage;
+    private javax.swing.JButton updateBtn;
     // End of variables declaration//GEN-END:variables
 }

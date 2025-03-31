@@ -61,7 +61,7 @@ public class ViewRecords extends javax.swing.JFrame {
 
             },
             new String [] {
-                "ID", "Item Name", "Quantity", "Borrower"
+                "Item Name", "Quantity", "Borrower"
             }
         ));
         jScrollPane1.setViewportView(jTable1);
