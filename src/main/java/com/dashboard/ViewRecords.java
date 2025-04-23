@@ -37,7 +37,7 @@ public class ViewRecords extends javax.swing.JFrame {
                 String[] rowData = line.split(","); // Split CSV data
 
                 if (rowData.length >= 2) { // Ensure data format is correct
-                    int quantity = Integer.parseInt(rowData[1].trim()); // Convert quantity to integer
+                    int quantity = Integer.parseInt(rowData[2].trim()); // Convert quantity to integer
 
                     // If quantity is less than 10, add to warning list
                     if (quantity < 10) {
@@ -82,7 +82,7 @@ public class ViewRecords extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Item Name", "Quantity", "Borrower"
+                "ID", "Item Name", "Quantity", "Borrower"
             }
         ));
         jScrollPane1.setViewportView(jTable1);

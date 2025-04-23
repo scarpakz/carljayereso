@@ -57,11 +57,7 @@ public class LoginFrame extends javax.swing.JFrame {
         jLabel3.setText("User ID");
         jLabel3.setToolTipText("");
         jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 130, -1, 30));
-
-        password.setText("jPasswordField1");
         jPanel1.add(password, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 170, 180, 30));
-
-        user_id.setText("Enter User ID");
         jPanel1.add(user_id, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 130, 180, 30));
 
         loginBtn.setBackground(new java.awt.Color(0, 115, 255));

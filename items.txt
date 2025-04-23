@@ -1,4 +1,3 @@
-Mouse,223,Jerick
-J,78,JASON
-Keyboard,3,CJ
-Headset,5,Prince
+74764,MSDs,112,32
+21621,Jason,99,CJs
+95590,CJ,321,sJJ

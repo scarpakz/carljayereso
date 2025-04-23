@@ -2,6 +2,7 @@
 package com.addItem;
 
 import java.io.*;
+import java.util.Random;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -90,7 +91,7 @@ public class AddItem extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Item Name", "Quantity", "Borrower"
+                "ID", "Item Name", "Quantity", "Borrower"
             }
         ));
         jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -232,12 +233,15 @@ public class AddItem extends javax.swing.JFrame {
     }
     
     private void AddButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddButtonActionPerformed
+        // Generate a random ID
+        Random rand = new Random();
+        int randomId = rand.nextInt(100000);
         
         if (itemName.getText().equals("") || quantity.getText().equals("") || borrower.getText().equals("")) { // validate integer for quantity
             JOptionPane.showMessageDialog(this, "Don't leave any blanks!");
         } else {
             
-            String data[] = {itemName.getText(), quantity.getText(), borrower.getText() };
+            String data[] = {randomId + "", itemName.getText(), quantity.getText(), borrower.getText() };
             DefaultTableModel tblModel = (DefaultTableModel)jTable1.getModel();
             
             tblModel.addRow(data);
@@ -245,7 +249,7 @@ public class AddItem extends javax.swing.JFrame {
             
             // Save Data to .txt file
             try (FileWriter writer = new FileWriter("items.txt", true)) { // 'true' enables append mode
-                writer.write(itemName.getText() + "," + quantity.getText() + "," + borrower.getText() + "\n");
+                writer.write(randomId + "," + itemName.getText() + "," + quantity.getText() + "," + borrower.getText() + "\n");
             } catch (IOException e) {
                 JOptionPane.showMessageDialog(this, "Error saving data: " + e.getMessage());
             }
@@ -334,9 +338,10 @@ public class AddItem extends javax.swing.JFrame {
 
         if (selectedRow != -1) {
             // Get data from the selected row
-            String tblItemName = tblModel.getValueAt(selectedRow, 0).toString();
-            String tblQuantity = tblModel.getValueAt(selectedRow, 1).toString();
-            String tblBorrower = tblModel.getValueAt(selectedRow, 2).toString();
+//            String tblID = tblModel.getValueAt(selectedRow, 0).toString();
+            String tblItemName = tblModel.getValueAt(selectedRow, 1).toString();
+            String tblQuantity = tblModel.getValueAt(selectedRow, 2).toString();
+            String tblBorrower = tblModel.getValueAt(selectedRow, 3).toString();
 
             // Set text fields with selected row data
             itemName.setText(tblItemName);
@@ -357,24 +362,25 @@ public class AddItem extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Please select a row to update.");
             return;
         }
-
+        // Get the existing ID from the table (not from user input)
+        String existingID = tblModel.getValueAt(selectedRow, 0).toString();
         // Get updated values from input fields
         String updatedItemName = itemName.getText();
         String updatedQuantity = quantity.getText();
         String updatedBorrower = borrower.getText();
 
         // Update table values
-        tblModel.setValueAt(updatedItemName, selectedRow, 0);
-        tblModel.setValueAt(updatedQuantity, selectedRow, 1);
-        tblModel.setValueAt(updatedBorrower, selectedRow, 2);
+        tblModel.setValueAt(updatedItemName, selectedRow, 1);
+        tblModel.setValueAt(updatedQuantity, selectedRow, 2);
+        tblModel.setValueAt(updatedBorrower, selectedRow, 3);
 
         // Update text file
-        updateFileAfterEdit(selectedRow, updatedItemName, updatedQuantity, updatedBorrower);
+        updateFileAfterEdit(selectedRow, existingID, updatedItemName, updatedQuantity, updatedBorrower);
 
         JOptionPane.showMessageDialog(this, "Successfully Updated!");
     }//GEN-LAST:event_updateBtnActionPerformed
     
-    private void updateFileAfterEdit(int rowIndex, String newItem, String newQuantity, String newBorrower) {
+    private void updateFileAfterEdit(int rowIndex, String newID, String newItem, String newQuantity, String newBorrower) {
         File inputFile = new File("items.txt");
         File tempFile = new File("temp_items.txt");
 
@@ -386,7 +392,7 @@ public class AddItem extends javax.swing.JFrame {
             while ((line = reader.readLine()) != null) {
                 if (currentIndex == rowIndex) {
                     // Write updated data instead of the old row
-                    writer.write(newItem + "," + newQuantity + "," + newBorrower + "\n");
+                    writer.write(newID + "," + newItem + "," + newQuantity + "," + newBorrower + "\n");
                 } else {
                     writer.write(line + "\n"); // Write other lines unchanged
                 }
