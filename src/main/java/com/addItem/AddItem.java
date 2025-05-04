@@ -43,8 +43,6 @@ public class AddItem extends javax.swing.JFrame {
         jTable1 = new javax.swing.JTable();
         deleteBtn = new javax.swing.JButton();
         updateBtn = new javax.swing.JButton();
-        borrower = new javax.swing.JTextField();
-        jLabel5 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -91,7 +89,7 @@ public class AddItem extends javax.swing.JFrame {
 
             },
             new String [] {
-                "ID", "Item Name", "Quantity", "Borrower"
+                "ID", "Item Name", "Quantity"
             }
         ));
         jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -115,16 +113,6 @@ public class AddItem extends javax.swing.JFrame {
             }
         });
 
-        borrower.setFont(new java.awt.Font("Helvetica Neue", 0, 18)); // NOI18N
-        borrower.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                borrowerActionPerformed(evt);
-            }
-        });
-
-        jLabel5.setFont(new java.awt.Font("Helvetica Neue", 0, 18)); // NOI18N
-        jLabel5.setText("Borrower");
-
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -141,15 +129,13 @@ public class AddItem extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.TRAILING))
+                            .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING))
                         .addGap(18, 18, 18)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(successMessage)
                             .addComponent(itemName)
                             .addComponent(quantity)
-                            .addComponent(AddButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 194, Short.MAX_VALUE)
-                            .addComponent(borrower, javax.swing.GroupLayout.Alignment.TRAILING))
+                            .addComponent(AddButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 194, Short.MAX_VALUE))
                         .addGap(39, 39, 39)
                         .addComponent(deleteBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
@@ -164,21 +150,17 @@ public class AddItem extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(closeBtn))
-                .addGap(42, 42, 42)
+                .addGap(62, 62, 62)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(itemName, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 16, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(quantity, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel4))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(borrower, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel5))
-                .addGap(18, 18, 18)
+                .addGap(29, 29, 29)
                 .addComponent(successMessage)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 41, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(AddButton, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(deleteBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -237,11 +219,11 @@ public class AddItem extends javax.swing.JFrame {
         Random rand = new Random();
         int randomId = rand.nextInt(100000);
         
-        if (itemName.getText().equals("") || quantity.getText().equals("") || borrower.getText().equals("")) { // validate integer for quantity
+        if (itemName.getText().equals("") || quantity.getText().equals("")) { // validate integer for quantity
             JOptionPane.showMessageDialog(this, "Don't leave any blanks!");
         } else {
             
-            String data[] = {randomId + "", itemName.getText(), quantity.getText(), borrower.getText() };
+            String data[] = {randomId + "", itemName.getText(), quantity.getText()};
             DefaultTableModel tblModel = (DefaultTableModel)jTable1.getModel();
             
             tblModel.addRow(data);
@@ -249,7 +231,7 @@ public class AddItem extends javax.swing.JFrame {
             
             // Save Data to .txt file
             try (FileWriter writer = new FileWriter("items.txt", true)) { // 'true' enables append mode
-                writer.write(randomId + "," + itemName.getText() + "," + quantity.getText() + "," + borrower.getText() + "\n");
+                writer.write(randomId + "," + itemName.getText() + "," + quantity.getText() + "\n");
             } catch (IOException e) {
                 JOptionPane.showMessageDialog(this, "Error saving data: " + e.getMessage());
             }
@@ -260,7 +242,6 @@ public class AddItem extends javax.swing.JFrame {
             // Clear Fields
             this.itemName.setText("");
             this.quantity.setText("");
-            this.borrower.setText("");
             this.successMessage.show();
         }
         
@@ -290,17 +271,16 @@ public class AddItem extends javax.swing.JFrame {
         // Get the data from the selected row
         String tblItemName = tblModel.getValueAt(selectedRow, 0).toString();
         String tblQuantity = tblModel.getValueAt(selectedRow, 1).toString();
-        String tblBorrower = tblModel.getValueAt(selectedRow, 2).toString();
 
         // Remove row from table
         tblModel.removeRow(selectedRow);
 
         // Update file after deletion
-        updateFileAfterDelete(tblItemName, tblQuantity, tblBorrower);
+        updateFileAfterDelete(tblItemName, tblQuantity);
     }//GEN-LAST:event_deleteBtnActionPerformed
 
     // Function to rewrite 'items.txt' without the deleted row
-    private void updateFileAfterDelete(String itemName, String quantity, String borrower) {
+    private void updateFileAfterDelete(String itemName, String quantity) {
         File inputFile = new File("items.txt");
         File tempFile = new File("temp_items.txt");
 
@@ -311,7 +291,7 @@ public class AddItem extends javax.swing.JFrame {
             while ((line = reader.readLine()) != null) {
                 String[] rowData = line.split(",");
                 // Check if the current line matches the deleted row
-                if (rowData.length >= 3 && rowData[0].equals(itemName) && rowData[1].equals(quantity) && rowData[2].equals(borrower)) {
+                if (rowData.length >= 3 && rowData[0].equals(itemName) && rowData[1].equals(quantity)) {
                     continue; // Skip this line (deleting it)
                 }
                 writer.write(line + "\n"); // Write other lines to temp file
@@ -341,18 +321,12 @@ public class AddItem extends javax.swing.JFrame {
 //            String tblID = tblModel.getValueAt(selectedRow, 0).toString();
             String tblItemName = tblModel.getValueAt(selectedRow, 1).toString();
             String tblQuantity = tblModel.getValueAt(selectedRow, 2).toString();
-            String tblBorrower = tblModel.getValueAt(selectedRow, 3).toString();
 
             // Set text fields with selected row data
             itemName.setText(tblItemName);
             quantity.setText(tblQuantity);
-            borrower.setText(tblBorrower);
         }
     }//GEN-LAST:event_jTable1MouseClicked
-
-    private void borrowerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_borrowerActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_borrowerActionPerformed
 
     private void updateBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateBtnActionPerformed
         DefaultTableModel tblModel = (DefaultTableModel) jTable1.getModel();
@@ -367,20 +341,18 @@ public class AddItem extends javax.swing.JFrame {
         // Get updated values from input fields
         String updatedItemName = itemName.getText();
         String updatedQuantity = quantity.getText();
-        String updatedBorrower = borrower.getText();
 
         // Update table values
         tblModel.setValueAt(updatedItemName, selectedRow, 1);
         tblModel.setValueAt(updatedQuantity, selectedRow, 2);
-        tblModel.setValueAt(updatedBorrower, selectedRow, 3);
 
         // Update text file
-        updateFileAfterEdit(selectedRow, existingID, updatedItemName, updatedQuantity, updatedBorrower);
+        updateFileAfterEdit(selectedRow, existingID, updatedItemName, updatedQuantity);
 
         JOptionPane.showMessageDialog(this, "Successfully Updated!");
     }//GEN-LAST:event_updateBtnActionPerformed
     
-    private void updateFileAfterEdit(int rowIndex, String newID, String newItem, String newQuantity, String newBorrower) {
+    private void updateFileAfterEdit(int rowIndex, String newID, String newItem, String newQuantity) {
         File inputFile = new File("items.txt");
         File tempFile = new File("temp_items.txt");
 
@@ -392,7 +364,7 @@ public class AddItem extends javax.swing.JFrame {
             while ((line = reader.readLine()) != null) {
                 if (currentIndex == rowIndex) {
                     // Write updated data instead of the old row
-                    writer.write(newID + "," + newItem + "," + newQuantity + "," + newBorrower + "\n");
+                    writer.write(newID + "," + newItem + "," + newQuantity + "\n");
                 } else {
                     writer.write(line + "\n"); // Write other lines unchanged
                 }
@@ -449,14 +421,12 @@ public class AddItem extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton AddButton;
-    private javax.swing.JTextField borrower;
     private javax.swing.JButton closeBtn;
     private javax.swing.JButton deleteBtn;
     private javax.swing.JTextField itemName;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
