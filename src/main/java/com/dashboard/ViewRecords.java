@@ -5,7 +5,10 @@
 package com.dashboard;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -21,6 +24,7 @@ public class ViewRecords extends javax.swing.JFrame {
      */
     public ViewRecords() {
         initComponents();
+        this.successMessage.hide();
         loadSavedData();
     }
     
@@ -77,14 +81,18 @@ public class ViewRecords extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         idNumber = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
+        borrowBtn = new javax.swing.JButton();
         quantity = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
-        jButton2 = new javax.swing.JButton();
+        viewRecordsBtn = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
-        quantity1 = new javax.swing.JTextField();
+        borrower = new javax.swing.JTextField();
+        itemName = new javax.swing.JTextField();
+        jLabel5 = new javax.swing.JLabel();
+        successMessage = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -94,6 +102,11 @@ public class ViewRecords extends javax.swing.JFrame {
                 "ID", "Item Name", "Quantity"
             }
         ));
+        jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTable1MouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(jTable1);
 
         closeBtn.setText("Back To Dashboard");
@@ -107,51 +120,76 @@ public class ViewRecords extends javax.swing.JFrame {
         jLabel1.setText("Borrow an Item");
 
         jLabel2.setFont(new java.awt.Font("Helvetica Neue", 0, 18)); // NOI18N
-        jLabel2.setText("Enter ID");
+        jLabel2.setText("ID");
 
-        jButton1.setBackground(new java.awt.Color(0, 204, 0));
-        jButton1.setText("Submit");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        idNumber.setEditable(false);
+        idNumber.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                idNumberActionPerformed(evt);
+            }
+        });
+
+        borrowBtn.setBackground(new java.awt.Color(0, 204, 0));
+        borrowBtn.setText("Submit");
+        borrowBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                borrowBtnActionPerformed(evt);
             }
         });
 
         jLabel3.setFont(new java.awt.Font("Helvetica Neue", 0, 18)); // NOI18N
-        jLabel3.setText("Quantity");
+        jLabel3.setText("# of items to be borrowed");
 
-        jButton2.setBackground(new java.awt.Color(0, 171, 255));
-        jButton2.setText("Click to View Record of Borrowers");
+        viewRecordsBtn.setBackground(new java.awt.Color(0, 171, 255));
+        viewRecordsBtn.setText("Click to View Record of Borrowers");
 
         jLabel4.setFont(new java.awt.Font("Helvetica Neue", 0, 18)); // NOI18N
         jLabel4.setText("Name of Borrower");
+
+        itemName.setEditable(false);
+        itemName.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                itemNameActionPerformed(evt);
+            }
+        });
+
+        jLabel5.setFont(new java.awt.Font("Helvetica Neue", 0, 18)); // NOI18N
+        jLabel5.setText("Item Name");
+
+        successMessage.setForeground(new java.awt.Color(51, 204, 0));
+        successMessage.setText("Successfully Added!");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(63, 63, 63)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(63, 63, 63)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(closeBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 650, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton2)
-                            .addComponent(jLabel1)))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(132, 132, 132)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel4)
+                    .addComponent(closeBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 650, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(viewRecordsBtn)
+                    .addComponent(jLabel1)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addGroup(jPanel1Layout.createSequentialGroup()
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(jLabel5)
+                                .addComponent(jLabel2))
+                            .addGap(18, 18, 18)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(idNumber, javax.swing.GroupLayout.PREFERRED_SIZE, 222, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(itemName, javax.swing.GroupLayout.PREFERRED_SIZE, 222, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(jPanel1Layout.createSequentialGroup()
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(jLabel4)
+                                .addComponent(jLabel3))
+                            .addGap(18, 18, 18)
                             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jLabel3)
-                                .addComponent(jLabel2)))
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(quantity, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
-                            .addComponent(idNumber)
-                            .addComponent(quantity1))))
+                                .addComponent(borrowBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 222, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(borrower)
+                                    .addComponent(quantity, javax.swing.GroupLayout.PREFERRED_SIZE, 222, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(successMessage)))))
                 .addContainerGap(67, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -162,24 +200,31 @@ public class ViewRecords extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel1)
                 .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(idNumber, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel2)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(idNumber, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(itemName, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel5))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(quantity, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(quantity1, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(borrower, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel4))
-                .addGap(18, 18, 18)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 22, Short.MAX_VALUE)
-                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(9, 9, 9)
+                .addComponent(successMessage)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(borrowBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
+                .addComponent(viewRecordsBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 356, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(19, 19, 19))
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -204,9 +249,123 @@ public class ViewRecords extends javax.swing.JFrame {
         this.hide();
     }//GEN-LAST:event_closeBtnActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void borrowBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_borrowBtnActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
+        DefaultTableModel tblModel = (DefaultTableModel) jTable1.getModel();
+        int selectedRow = jTable1.getSelectedRow(); // Get selected row index
+
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(this, "Please select a row.");
+            return;
+        }
+        // Get the existing ID from the table (not from user input)
+        String existingID = tblModel.getValueAt(selectedRow, 0).toString();
+        // Get updated values from input fields
+        String updatedItemName = itemName.getText();
+        String updatedQuantity = quantity.getText();
+        String updatedBorrower = borrower.getText();
+
+        // Update table values
+        tblModel.setValueAt(updatedItemName, selectedRow, 1);
+        tblModel.setValueAt(updatedQuantity, selectedRow, 2);
+
+        // Update text file
+        updateFileAfterEdit(selectedRow, existingID, updatedItemName, updatedQuantity, updatedBorrower);
+
+        JOptionPane.showMessageDialog(this, "Successfully Updated!");
+    }//GEN-LAST:event_borrowBtnActionPerformed
+
+    private void updateFileAfterEdit(int rowIndex, String newID, String newItem, String newQuantity, String newBorrower) {
+        
+        // For main file
+        File inputFile = new File("items.txt");
+        File tempFile = new File("temp_items.txt");
+
+        // Update the main text file.
+        try (BufferedReader reader = new BufferedReader(new FileReader(inputFile));
+             BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile))) {
+
+            String line;
+            int currentIndex = 0; // Track row index while reading
+            while ((line = reader.readLine()) != null) {
+                if (currentIndex == rowIndex) {
+                    // Write updated data instead of the old row
+                    writer.write(newID + "," + newItem + "," + newQuantity + "\n");
+                } else {
+                    writer.write(line + "\n"); // Write other lines unchanged
+                }
+                currentIndex++;
+            }
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(this, "Error updating file: " + e.getMessage());
+            return;
+        }
+
+        // Replace the original file with the updated file
+        if (!inputFile.delete()) {
+            JOptionPane.showMessageDialog(this, "Error deleting original file.");
+            return;
+        }
+        if (!tempFile.renameTo(inputFile)) {
+            JOptionPane.showMessageDialog(this, "Error renaming temp file.");
+        }
+        
+        // Update the masterlist record for borrowers
+        // Create a separate text file
+        File recordInputFile = new File("borrower_records.txt");
+        File recordTempFile = new File("borrower_temp_items.txt");
+        
+        if (borrower.getText().equals("") || quantity.getText().equals("")) { // validate integer for quantity
+            JOptionPane.showMessageDialog(this, "Don't leave any blanks!");
+        } else {
+            // Save Data to .txt file
+            try (FileWriter writer = new FileWriter("borrower_records.txt", true)) { // 'true' enables append mode
+                writer.write(newID + "," + newItem + "," + newQuantity + "," + newBorrower + "\n");
+            } catch (IOException e) {
+                JOptionPane.showMessageDialog(this, "Error saving data: " + e.getMessage());
+            }
+
+            // Reload table data from file
+            loadSavedData();
+            
+            JOptionPane.showMessageDialog(this, "Successfully Added!");
+            
+            // Clear Fields
+            this.itemName.setText("");
+            this.idNumber.setText("");
+            this.borrower.setText("");
+            this.quantity.setText("");
+            this.successMessage.show();
+        }
+    }
+    
+    private void idNumberActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_idNumberActionPerformed
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_idNumberActionPerformed
+
+    private void itemNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemNameActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_itemNameActionPerformed
+
+    private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
+        // TODO add your handling code here:
+        DefaultTableModel tblModel = (DefaultTableModel)jTable1.getModel();
+        
+        int selectedRow = jTable1.getSelectedRow(); // Get selected row index
+
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(this, "Please select a row.");
+            return;
+        } else {
+            String tblId = tblModel.getValueAt(selectedRow, 0).toString();
+            String tblItemName = tblModel.getValueAt(selectedRow, 1).toString();
+
+            // Set text fields with selected row data
+            idNumber.setText(tblId);
+            itemName.setText(tblItemName);
+        }
+    }//GEN-LAST:event_jTable1MouseClicked
 
     /**
      * @param args the command line arguments
@@ -244,18 +403,21 @@ public class ViewRecords extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton borrowBtn;
+    private javax.swing.JTextField borrower;
     private javax.swing.JButton closeBtn;
     private javax.swing.JTextField idNumber;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
+    private javax.swing.JTextField itemName;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
     private javax.swing.JTextField quantity;
-    private javax.swing.JTextField quantity1;
+    private javax.swing.JLabel successMessage;
+    private javax.swing.JButton viewRecordsBtn;
     // End of variables declaration//GEN-END:variables
 }

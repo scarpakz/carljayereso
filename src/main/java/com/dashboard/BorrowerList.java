@@ -4,6 +4,12 @@
  */
 package com.dashboard;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author jasonjavier
@@ -15,6 +21,7 @@ public class BorrowerList extends javax.swing.JFrame {
      */
     public BorrowerList() {
         initComponents();
+        loadSavedData();
     }
 
     /**
@@ -32,6 +39,7 @@ public class BorrowerList extends javax.swing.JFrame {
         jTable1 = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
 
         jButton1.setBackground(new java.awt.Color(255, 51, 51));
         jButton1.setFont(new java.awt.Font("Helvetica Neue", 0, 14)); // NOI18N
@@ -86,7 +94,42 @@ public class BorrowerList extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+    
+    public void loadSavedData() {
+        DefaultTableModel tblModel = (DefaultTableModel) jTable1.getModel();
+        tblModel.setRowCount(0); // Clear the table before loading
 
+        StringBuilder lowStockItems = new StringBuilder(); // To store low-stock items
+
+        try (BufferedReader reader = new BufferedReader(new FileReader("borrower_records.txt"))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] rowData = line.split(","); // Split CSV data
+
+                if (rowData.length >= 3) { // Ensure data format is correct
+                    int quantity = Integer.parseInt(rowData[3].trim()); // Convert quantity to integer
+
+                    // If quantity is less than 10, add to warning list
+                    if (quantity < 10) {
+                        lowStockItems.append(rowData[0]).append(" (").append(quantity).append(" left)\n");
+                    }
+                }
+
+                tblModel.addRow(rowData); // Add to table
+            }
+
+            // Show notification if any low stock items exist
+            if (lowStockItems.length() > 0) {
+                JOptionPane.showMessageDialog(this, 
+                    "⚠ Warning: Low stock detected!\n\n" + lowStockItems.toString(),
+                    "Low Stock Alert", 
+                    JOptionPane.WARNING_MESSAGE);
+            }
+
+        } catch (IOException | NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Error loading data: " + e.getMessage());
+        }
+    }
     /**
      * @param args the command line arguments
      */

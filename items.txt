@@ -1,2 +1,3 @@
-46814,Mouse,50
-37123,Keyboard,32
+46814,Mouse,43
+37123,Keyboard,3
+30595,Monitor,35

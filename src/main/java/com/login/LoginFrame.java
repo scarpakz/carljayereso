@@ -39,6 +39,7 @@ public class LoginFrame extends javax.swing.JFrame {
         errorMessage = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
 
         jPanel1.setBackground(new java.awt.Color(0, 207, 242));
         jPanel1.setMinimumSize(new java.awt.Dimension(1000, 600));

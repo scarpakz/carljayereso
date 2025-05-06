@@ -34,6 +34,7 @@ public class DashboardFrame extends javax.swing.JFrame {
         addItem = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
 
         jPanel1.setBackground(new java.awt.Color(0, 207, 242));
 

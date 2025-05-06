@@ -45,6 +45,7 @@ public class AddItem extends javax.swing.JFrame {
         updateBtn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
 
         jLabel1.setFont(new java.awt.Font("Helvetica Neue", 1, 18)); // NOI18N
         jLabel1.setText("Add Item");
@@ -248,17 +249,6 @@ public class AddItem extends javax.swing.JFrame {
     }//GEN-LAST:event_AddButtonActionPerformed
 
     private void deleteBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteBtnActionPerformed
-        // TODO add your handling code here:
-//        DefaultTableModel tblModel = (DefaultTableModel)jTable1.getModel();
-//        if (jTable1.getSelectedRowCount() == 1) {
-//            tblModel.removeRow(jTable1.getSelectedRow());
-//        } else {
-//            if (jTable1.getRowCount() == 0) {
-//                JOptionPane.showMessageDialog(this, "Table is empty.");
-//            } else {
-//                JOptionPane.showMessageDialog(this, "Please select a row.");
-//            }
-//        }
 
         DefaultTableModel tblModel = (DefaultTableModel) jTable1.getModel();
         int selectedRow = jTable1.getSelectedRow(); // Get selected row index
@@ -318,7 +308,6 @@ public class AddItem extends javax.swing.JFrame {
 
         if (selectedRow != -1) {
             // Get data from the selected row
-//            String tblID = tblModel.getValueAt(selectedRow, 0).toString();
             String tblItemName = tblModel.getValueAt(selectedRow, 1).toString();
             String tblQuantity = tblModel.getValueAt(selectedRow, 2).toString();
 
