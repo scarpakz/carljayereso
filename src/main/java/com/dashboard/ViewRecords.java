@@ -288,12 +288,12 @@ public class ViewRecords extends javax.swing.JFrame {
         tblModel.setValueAt(updatedQuantity, selectedRow, 2);
 
         // Update text file
-        updateFileAfterEdit(selectedRow, existingID, updatedItemName, updatedQuantity, updatedBorrower);
+        updateFileAfterEdit(selectedRow, existingID, updatedItemName, updatedQuantity, quantityToSubtract + "", updatedBorrower);
 
         JOptionPane.showMessageDialog(this, "Successfully Updated!");
     }//GEN-LAST:event_borrowBtnActionPerformed
 
-    private void updateFileAfterEdit(int rowIndex, String newID, String newItem, String newQuantity, String newBorrower) {
+    private void updateFileAfterEdit(int rowIndex, String newID, String newItem, String newQuantity, String newQuantityToSubtract, String newBorrower) {
         
         // For main file
         File inputFile = new File("items.txt");
@@ -338,7 +338,7 @@ public class ViewRecords extends javax.swing.JFrame {
         } else {
             // Save Data to .txt file
             try (FileWriter writer = new FileWriter("borrower_records.txt", true)) { // 'true' enables append mode
-                writer.write(newID + "," + newItem + "," + newQuantity + "," + newBorrower + "\n");
+                writer.write(newID + "," + newItem + "," + newQuantityToSubtract + "," + newBorrower + "\n");
             } catch (IOException e) {
                 JOptionPane.showMessageDialog(this, "Error saving data: " + e.getMessage());
             }

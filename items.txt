@@ -5,16 +5,16 @@
 61534,Xiaomi Redmi Note 12,27
 76289,Motorola Edge 40,15
 49320,Realme GT Neo 5,20
-85731,Asus ROG Phone 6,10
+85731,Asus ROG Phone 6,101
 93472,Oppo Find X5,16
-30081,Huawei P50 Pro,14
+30081,Lenovo Legion Phone Duel,12
 75830,Nokia G60,19
 67152,Infinix Zero 5G,12
 41894,Honor Magic 5,17
-58602,Lenovo Legion Phone Duel,9
-74918,Blackview BV8800,11
+58602,Lenovo Legion Phone Duel,91
+74918,Blackview BV8800,111
 23095,Vivo X90,24
-30286,ZTE Axon 40 Ultra,13
+30286,ZTE Axon 40 Ultra,55
 69423,Tecno Phantom X2,21
-56703,Meizu 20 Pro,8
+56703,Meizu 20 Pro,88
 44561,Sony Xperia 1 IV,10
