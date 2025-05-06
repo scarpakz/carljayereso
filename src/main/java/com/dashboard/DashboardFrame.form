@@ -91,7 +91,7 @@
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="InaiMathi" size="24" style="1"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="Inventory Management"/>
+            <Property name="text" type="java.lang.String" value="Cellphone Inventory Management"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JButton" name="viewItemsBtn">

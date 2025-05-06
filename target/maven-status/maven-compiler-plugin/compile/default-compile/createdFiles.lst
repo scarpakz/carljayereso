@@ -18,8 +18,10 @@ com/dashboard/DashboardFrame.class
 com/dashboard/ViewRecords.class
 com/addItem/AddItem$7.class
 com/addItem/AddItem$5.class
+com/dashboard/BorrowerList$2.class
 com/addItem/AddItem$2.class
 com/dashboard/DashboardFrame$3.class
 com/dashboard/ViewRecords$4.class
 com/login/LoginFrame$1.class
+com/dashboard/ViewRecords$7.class
 com/addItem/AddItem$4.class

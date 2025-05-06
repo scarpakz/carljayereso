@@ -39,7 +39,7 @@ public class DashboardFrame extends javax.swing.JFrame {
         jPanel1.setBackground(new java.awt.Color(0, 207, 242));
 
         jLabel1.setFont(new java.awt.Font("InaiMathi", 1, 24)); // NOI18N
-        jLabel1.setText("Inventory Management");
+        jLabel1.setText("Cellphone Inventory Management");
 
         viewItemsBtn.setFont(new java.awt.Font("Helvetica Neue", 0, 18)); // NOI18N
         viewItemsBtn.setText("View Items");

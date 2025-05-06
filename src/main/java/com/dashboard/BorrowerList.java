@@ -33,7 +33,7 @@ public class BorrowerList extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jButton1 = new javax.swing.JButton();
+        exitBtn = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
@@ -41,10 +41,14 @@ public class BorrowerList extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
 
-        jButton1.setBackground(new java.awt.Color(255, 51, 51));
-        jButton1.setFont(new java.awt.Font("Helvetica Neue", 0, 14)); // NOI18N
-        jButton1.setForeground(new java.awt.Color(255, 255, 255));
-        jButton1.setText("EXIT");
+        exitBtn.setBackground(new java.awt.Color(255, 51, 51));
+        exitBtn.setFont(new java.awt.Font("Helvetica Neue", 0, 14)); // NOI18N
+        exitBtn.setText("EXIT");
+        exitBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                exitBtnActionPerformed(evt);
+            }
+        });
 
         jLabel1.setFont(new java.awt.Font("Helvetica Neue", 0, 24)); // NOI18N
         jLabel1.setText("All Records");
@@ -74,7 +78,7 @@ public class BorrowerList extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(exitBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(55, 55, 55)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 738, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -84,7 +88,7 @@ public class BorrowerList extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(exitBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jLabel1)
                 .addGap(18, 18, 18)
@@ -93,37 +97,24 @@ public class BorrowerList extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void exitBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitBtnActionPerformed
+        // TODO add your handling code here:
+        this.hide();
+    }//GEN-LAST:event_exitBtnActionPerformed
     
     public void loadSavedData() {
         DefaultTableModel tblModel = (DefaultTableModel) jTable1.getModel();
         tblModel.setRowCount(0); // Clear the table before loading
-
-        StringBuilder lowStockItems = new StringBuilder(); // To store low-stock items
 
         try (BufferedReader reader = new BufferedReader(new FileReader("borrower_records.txt"))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 String[] rowData = line.split(","); // Split CSV data
 
-                if (rowData.length >= 3) { // Ensure data format is correct
-                    int quantity = Integer.parseInt(rowData[3].trim()); // Convert quantity to integer
-
-                    // If quantity is less than 10, add to warning list
-                    if (quantity < 10) {
-                        lowStockItems.append(rowData[0]).append(" (").append(quantity).append(" left)\n");
-                    }
-                }
-
                 tblModel.addRow(rowData); // Add to table
-            }
-
-            // Show notification if any low stock items exist
-            if (lowStockItems.length() > 0) {
-                JOptionPane.showMessageDialog(this, 
-                    "⚠ Warning: Low stock detected!\n\n" + lowStockItems.toString(),
-                    "Low Stock Alert", 
-                    JOptionPane.WARNING_MESSAGE);
             }
 
         } catch (IOException | NumberFormatException e) {
@@ -166,7 +157,7 @@ public class BorrowerList extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton exitBtn;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;

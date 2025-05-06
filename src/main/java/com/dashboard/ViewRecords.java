@@ -12,6 +12,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import com.dashboard.BorrowerList;
 
 /**
  *
@@ -142,6 +143,11 @@ public class ViewRecords extends javax.swing.JFrame {
 
         viewRecordsBtn.setBackground(new java.awt.Color(0, 171, 255));
         viewRecordsBtn.setText("Click to View Record of Borrowers");
+        viewRecordsBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                viewRecordsBtnActionPerformed(evt);
+            }
+        });
 
         jLabel4.setFont(new java.awt.Font("Helvetica Neue", 0, 18)); // NOI18N
         jLabel4.setText("Name of Borrower");
@@ -262,7 +268,19 @@ public class ViewRecords extends javax.swing.JFrame {
         String existingID = tblModel.getValueAt(selectedRow, 0).toString();
         // Get updated values from input fields
         String updatedItemName = itemName.getText();
-        String updatedQuantity = quantity.getText();
+        
+        // Get existing quantity from table and convert to int
+        int existingQuantity = Integer.parseInt(tblModel.getValueAt(selectedRow, 2).toString());
+
+        // Get quantity from input field and convert to int
+        int quantityToSubtract = Integer.parseInt(quantity.getText());
+
+        // Subtract the values
+        int updatedQuantityInt = existingQuantity - quantityToSubtract;
+
+        // Convert result back to string
+        String updatedQuantity = String.valueOf(updatedQuantityInt);
+        
         String updatedBorrower = borrower.getText();
 
         // Update table values
@@ -366,6 +384,12 @@ public class ViewRecords extends javax.swing.JFrame {
             itemName.setText(tblItemName);
         }
     }//GEN-LAST:event_jTable1MouseClicked
+
+    private void viewRecordsBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewRecordsBtnActionPerformed
+        // TODO add your handling code here:
+        BorrowerList bList = new BorrowerList();
+        bList.show();
+    }//GEN-LAST:event_viewRecordsBtnActionPerformed
 
     /**
      * @param args the command line arguments
